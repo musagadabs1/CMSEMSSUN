@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="TestInterfaceConnection">
+        <s:complexType />
+      </s:element>
+      <s:element name="TestInterfaceConnectionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="TestInterfaceConnectionResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendTextMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="oMesgType" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="SenderID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MsgDestinations" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="DLREnable" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendTextMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendTextMessageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ScheduleTextMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="oMesgType" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="SenderID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MsgDestinations" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ScheduleTime" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="DLREnable" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ScheduleTextMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ScheduleTextMessageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAvailableCredits">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAvailableCreditsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAvailableCreditsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserExpiryDate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserExpiryDateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetUserExpiryDateResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCreditsExpiryDate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCreditsExpiryDateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCreditsExpiryDateResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSubmittedMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="oMesgID" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSubmittedMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSubmittedMessageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="TestInterfaceConnectionSoapIn">
+    <wsdl:part name="parameters" element="tns:TestInterfaceConnection" />
+  </wsdl:message>
+  <wsdl:message name="TestInterfaceConnectionSoapOut">
+    <wsdl:part name="parameters" element="tns:TestInterfaceConnectionResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendTextMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:SendTextMessage" />
+  </wsdl:message>
+  <wsdl:message name="SendTextMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:SendTextMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="ScheduleTextMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:ScheduleTextMessage" />
+  </wsdl:message>
+  <wsdl:message name="ScheduleTextMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:ScheduleTextMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAvailableCreditsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAvailableCredits" />
+  </wsdl:message>
+  <wsdl:message name="GetAvailableCreditsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAvailableCreditsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUserExpiryDateSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUserExpiryDate" />
+  </wsdl:message>
+  <wsdl:message name="GetUserExpiryDateSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUserExpiryDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCreditsExpiryDateSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCreditsExpiryDate" />
+  </wsdl:message>
+  <wsdl:message name="GetCreditsExpiryDateSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCreditsExpiryDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSubmittedMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSubmittedMessage" />
+  </wsdl:message>
+  <wsdl:message name="GetSubmittedMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSubmittedMessageResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ServiceSoap">
+    <wsdl:operation name="TestInterfaceConnection">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Test Proximo Short Message Service Connection</wsdl:documentation>
+      <wsdl:input message="tns:TestInterfaceConnectionSoapIn" />
+      <wsdl:output message="tns:TestInterfaceConnectionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendTextMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Send Text messages to Proximo Short Message ServicesoMesgType : (0 - English, 8 - Arabic), MsgDestinations : comma delimited mobiles, DLREnable : (0 - Disable, 1 - Enable)</wsdl:documentation>
+      <wsdl:input message="tns:SendTextMessageSoapIn" />
+      <wsdl:output message="tns:SendTextMessageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ScheduleTextMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Schedule text messages to Proximo Short Message ServicesoMesgType : (0 - English, 8 - Arabic), MsgDestinations : comma delimited mobiles, ScheduleTime (24 Hours in Registered Time Zone - Format : MM/DD/YYYY HH:MM:SS), DLREnable : (0 - Disable, 1 - Enable)</wsdl:documentation>
+      <wsdl:input message="tns:ScheduleTextMessageSoapIn" />
+      <wsdl:output message="tns:ScheduleTextMessageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAvailableCredits">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Available Credits - Proximo Short Message Service</wsdl:documentation>
+      <wsdl:input message="tns:GetAvailableCreditsSoapIn" />
+      <wsdl:output message="tns:GetAvailableCreditsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserExpiryDate">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">User Expires On - Proximo Short Message Service</wsdl:documentation>
+      <wsdl:input message="tns:GetUserExpiryDateSoapIn" />
+      <wsdl:output message="tns:GetUserExpiryDateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCreditsExpiryDate">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Credits Expires On - Proximo Short Message Service</wsdl:documentation>
+      <wsdl:input message="tns:GetCreditsExpiryDateSoapIn" />
+      <wsdl:output message="tns:GetCreditsExpiryDateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSubmittedMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Show Message Content of Given Message ID from Proximo Short Message Service</wsdl:documentation>
+      <wsdl:input message="tns:GetSubmittedMessageSoapIn" />
+      <wsdl:output message="tns:GetSubmittedMessageSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServiceSoap" type="tns:ServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TestInterfaceConnection">
+      <soap:operation soapAction="http://tempuri.org/TestInterfaceConnection" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendTextMessage">
+      <soap:operation soapAction="http://tempuri.org/SendTextMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ScheduleTextMessage">
+      <soap:operation soapAction="http://tempuri.org/ScheduleTextMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAvailableCredits">
+      <soap:operation soapAction="http://tempuri.org/GetAvailableCredits" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserExpiryDate">
+      <soap:operation soapAction="http://tempuri.org/GetUserExpiryDate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCreditsExpiryDate">
+      <soap:operation soapAction="http://tempuri.org/GetCreditsExpiryDate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubmittedMessage">
+      <soap:operation soapAction="http://tempuri.org/GetSubmittedMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServiceSoap12" type="tns:ServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TestInterfaceConnection">
+      <soap12:operation soapAction="http://tempuri.org/TestInterfaceConnection" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendTextMessage">
+      <soap12:operation soapAction="http://tempuri.org/SendTextMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ScheduleTextMessage">
+      <soap12:operation soapAction="http://tempuri.org/ScheduleTextMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAvailableCredits">
+      <soap12:operation soapAction="http://tempuri.org/GetAvailableCredits" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserExpiryDate">
+      <soap12:operation soapAction="http://tempuri.org/GetUserExpiryDate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCreditsExpiryDate">
+      <soap12:operation soapAction="http://tempuri.org/GetCreditsExpiryDate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubmittedMessage">
+      <soap12:operation soapAction="http://tempuri.org/GetSubmittedMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Service">
+    <wsdl:port name="ServiceSoap" binding="tns:ServiceSoap">
+      <soap:address location="https://mobile.vectramind.com/api/Service.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServiceSoap12" binding="tns:ServiceSoap12">
+      <soap12:address location="https://mobile.vectramind.com/api/Service.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

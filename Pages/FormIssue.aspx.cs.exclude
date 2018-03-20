@@ -1,0 +1,227 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class Pages_FormIssue : System.Web.UI.Page
+{
+    StudentRegistrationDAL DBH = new StudentRegistrationDAL();
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        rdbName.Focus();
+        if (!IsPostBack)
+        {
+            rdbName.Checked = true;
+            gvStudentList.DataSource = "";
+            gvStudentList.DataBind();
+            LoadDropdown();
+            cleardata();
+        }
+    }
+    void cleardata()
+    {
+        txtregnoselected.Text = "";
+        hdnLinkID.Value = "";
+        txtformissuedescription.Text = "";
+        if(drpform .Items .Count >0)
+        drpform.SelectedIndex = 0;
+        clearformdata();
+    }
+    public void LoadDropdown()
+    {
+        StudentRegistrationDAL s = new StudentRegistrationDAL();
+        //ddlCallerCategory.DataSource = s.SetDropdownListCDB(8);
+        //ddlCallerCategory.DataTextField = "CCName";
+        //ddlCallerCategory.DataValueField = "CCId";
+        //ddlCallerCategory.DataBind();
+    }
+    private void FillGridView()
+    {
+        lblMesag.Text = "";
+        try
+        {
+            string FilterBy = "All";
+            if (rdbNumber.Checked == true)
+                FilterBy = "Number";
+            if (rdbEmail.Checked == true)
+                FilterBy = "Email";
+            if (rdbName.Checked == true)
+                FilterBy = "Name";
+            int NonRegistered = 0;
+            if (chkNonRegister.Checked == true)
+                NonRegistered = 1;
+            string EmpId = "";
+            EmpId = Session["EmpId"].ToString();
+            StudentRegistrationDAL s = new StudentRegistrationDAL();
+            System.Data.DataTable dt = s.GetStudentDetails(FilterBy, txtFilterValue.Text, NonRegistered, EmpId);
+            ViewState["_ds_grid"] = dt;
+            gvStudentList.DataSource = dt;
+            gvStudentList.DataBind();
+        }
+        catch (Exception ex)
+        {
+            lblMesag.Text = "Please Fill Correct Information!";
+        }
+    }
+    protected void gvStudentList_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            Label lblSN = (Label)e.Row.FindControl("lblSN");
+            lblSN.Text = (e.Row.RowIndex + 1).ToString();
+            Label lblDegree = (Label)e.Row.FindControl("lblDegree");
+            try
+            {
+                if (int.Parse(lblDegree.Text) == 1)
+                    lblDegree.Text = "BBA";
+                else if (int.Parse(lblDegree.Text) == 6)
+                    lblDegree.Text = "MBA";
+                else if (int.Parse(lblDegree.Text) == 7)
+                    lblDegree.Text = "BBA Weekend";
+                else if (int.Parse(lblDegree.Text) == 8)
+                    lblDegree.Text = "MBA Weekend";
+                else if (int.Parse(lblDegree.Text) == 9)
+                    lblDegree.Text = "Short Course";
+                if (int.Parse(lblDegree.Text) == 0)
+                    lblDegree.Text = "";
+            }
+            catch
+            {
+            }
+        }
+    }
+    protected void gvStudentList_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        try
+        {
+            if (e.CommandName.Equals("Modify"))
+            {
+                string Id = e.CommandArgument.ToString();
+                //Response.Redirect(string.Format("StudentRegistration.aspx?Id={0}", Id), false);
+                //Response.Redirect(string.Format("NewRegistrant.aspx?Id=" + Id + "&Flag=" + chkNonRegister.Checked), false);
+                txtregnoselected.Text = Id;
+                string strsql = "select linkid from tblStudent	where RegistrationNo ='" + txtregnoselected.Text + "' ";
+                hdnLinkID.Value = DBH.getresult(strsql).ToString ();
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        this.FillGridView();
+    }
+    protected void btnNew_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("NewRegistrant.aspx", false);
+    }
+    protected void gvStudentList_Sorted(object sender, EventArgs e)
+    {
+        try
+        {
+            string _expression = ViewState["_expression"].ToString();
+            string _direction = ViewState["_direction"].ToString();
+
+            System.Data.DataTable _ds = (System.Data.DataTable)ViewState["_ds_grid"];
+
+            _ds.DefaultView.Sort = _expression + " " + _direction;
+
+            gvStudentList.DataSource = _ds.DefaultView;
+            gvStudentList.DataBind();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+
+    }
+    protected void gvStudentList_Sorting(object sender, GridViewSortEventArgs e)
+    {
+        try
+        {
+            string _expression = e.SortExpression;
+            string _direction = e.SortDirection.ToString();
+
+            if (ViewState["_expression"] == null) { ViewState["_expression"] = ""; }
+            if (ViewState["_direction"] == null) { ViewState["_direction"] = ""; }
+
+            string _old_expression = ViewState["_expression"].ToString();
+            string _old_direction = ViewState["_direction"].ToString();
+
+            if (_expression == _old_expression)
+            {
+                if (_old_direction == "Asc")
+                {
+                    ViewState["_direction"] = "Desc";
+                }
+                else
+                {
+                    ViewState["_direction"] = "Asc";
+                }
+            }
+            else
+            {
+                ViewState["_direction"] = "Asc";
+                ViewState["_expression"] = _expression;
+            }
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+
+    }
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+        savefromissue();
+        cleardata();
+    }
+    protected void btnClear_Click(object sender, EventArgs e)
+    {
+        cleardata();
+    }
+    protected void btnNewForm_Click(object sender, EventArgs e)
+    {
+        ME1.Show();
+    }
+    protected void btnsaveForm_click(object sender, EventArgs e)
+    {
+        try
+        {
+            string strsql = "Insert into tblforms(Form,Description) values ('" + txtformname.Text.Trim() + "','" + txtdescription.Text.Trim() + "')";
+            DBH.getresult(strsql);
+            clearformdata();
+        }
+        catch (Exception Ex)
+        {
+            
+        }
+
+
+    }
+    void clearformdata()
+    {
+        txtformname.Text = "";
+        txtdescription .Text ="";
+        populatedropdown();
+    
+    }
+
+    void savefromissue()
+    {
+        string strsql = "insert into tblFormIssue (RegistrationNo,LinkID ,FormID ,Description ) values ('" + txtregnoselected.Text.Trim() + "'," + hdnLinkID .Value  + " ," + drpform.SelectedValue + " ,'" + txtformissuedescription.Text.Trim() + "')";
+        DBH.getresult(strsql);
+    }
+
+    void populatedropdown()
+    {
+        string strsql = "Select Form,FormID from tblforms order by Form";
+        DBH.PopulateDropDown(drpform, strsql);
+    }
+}

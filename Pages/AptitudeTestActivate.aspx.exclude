@@ -1,0 +1,406 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="AptitudeTestActivate.aspx.cs" Inherits="Pages_AptitudeTestActivate" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <style type="text/css">
+           .modalBackground
+        {
+            background-color: #000000;
+            filter: alpha(opacity=70);
+            opacity: 0.7;
+        }
+        
+        .AutoExtender
+        {
+            font-family: Verdana, Helvetica, sans-serif;
+            font-size: .8em;
+            font-weight: normal;
+            border: solid 1px #006699;
+            line-height: 20px;
+            padding: 0px;
+            background-color: White;
+            margin-left: 0px;
+            z-index: 10;
+            position: absolute;
+        }
+        .AutoExtenderList
+        {
+            border-bottom: dotted 1px #006699;
+            cursor: pointer;
+            color: Maroon;
+        }
+        .AutoExtenderHighlight
+        {
+            color: White;
+            background-color: #006699;
+            cursor: pointer;
+        }
+        #divwidth
+        {
+            width: 150px !important;
+        }
+        #divwidth div
+        {
+            width: 150px !important;
+        }
+        .talign
+        {
+        	text-align= center;        	
+        }
+    </style>
+   <script type="text/javascript" language="javascript">
+       function calshown(sender, args) {
+           sender, _popupBehaviour._element.style.zIndex = 100004;
+       }
+   </script>
+  <script type="text/javascript" language="javascript">
+      function checkAllRow(objRef) {
+            var GridView = objRef.parentNode.parentNode.parentNode;
+            var inputList = GridView.getElementsByTagName("input");
+            for (var i = 0; i < inputList.length; i++) {
+                //Get the Cell To find out ColumnIndex
+                var row = inputList[i].parentNode.parentNode;
+                if (inputList[i].type == "checkbox" && objRef
+                                                != inputList[i]) {
+                    if (objRef.checked) {
+                        //If the header checkbox is checked
+                        //check all checkboxes
+                        //and highlight all rows
+                        row.style.backgroundColor = "#5CADFF";
+                        inputList[i].checked = true;
+                    }
+                    else {
+                        //If the header checkbox is checked
+                        //uncheck all checkboxes
+                        //and change rowcolor back to original
+                        if (row.rowIndex % 2 == 0) 
+                        {
+                            //Alternating Row Color
+                            row.style.backgroundColor = "#AED6FF";
+                        }
+                        else 
+                        {
+                            row.style.backgroundColor = "white";
+                        }
+                        inputList[i].checked = false;
+                    }
+                }
+            }
+        }
+- See more at: http://www.dotnetfox.com/articles/check-or-uncheck-all-check-box-in-Asp-Net-gridview-using-javascript-1010.aspx#sthash.7lPW4qL9.dpuf
+        </script>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <asp:Panel ID="pnlDefaultControl" runat="server" DefaultButton="btnSearch">
+        <div id="all-form-wrap">
+            <!--Div Started to Wrapping all Forms Fields-->
+            <div class="form-fieldset-wrapper">
+                <!--Start Div To Wrapping Form Fields Set-->
+                <div class="form-fieldset-wrapper-top">
+                    <!--Div for the form fieldset wrapper top rounded part-->
+                    <h2>
+                        Search Student</h2>
+                </div>
+                <!--ended Div of Form fieldset wrapper top rounded part-->
+                <div class="form-fieldset-wrapper-mid">
+                    <!--Div for the form fieldset wrapper middle part for the left and right border-->
+     <div class="form-fieldset-wrapper-mid-inner9">
+                        <!--Form fieldset wrapper mid inner inside this Div all form fields inserted here-->
+                        <table border="0" cellpadding="0" cellspacing="0">                        
+                        <tr>
+                        <td>
+                        <asp:RadioButton ID="rdointernal" runat="server" text ="Internal Exam" GroupName ="rdointext" Checked="true" />                       
+                      
+                         <asp:RadioButton ID="rdoexternal" runat="server" text ="External Exam" GroupName ="rdointext" />
+                        </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    NON REGISTERED
+                                    <asp:CheckBox ID="chkNonRegister" runat="server" />&nbsp;
+                                    <asp:RadioButton ID="rdbNumber" runat="server" Text="Mobile No" GroupName="FilterBy" />
+                                    <asp:RadioButton ID="rdbEmail" runat="server" Text="Reg No" GroupName="FilterBy" />
+                                    <asp:RadioButton ID="rdbName" runat="server" Text="Name" GroupName="FilterBy" />
+                                    &nbsp;<%--<asp:DropDownList ID="ddlCallerCategory" runat="server" AppendDataBoundItems="true"
+                                        Width="100px" CssClass="textBox9">
+                                        <asp:ListItem Value="0">All Category</asp:ListItem>
+                                    </asp:DropDownList>--%><asp:TextBox ID="txtFilterValue" runat="server" Text="" CssClass="textBox1"></asp:TextBox>
+                                    <cc1:AutoCompleteExtender runat="server" ID="acFilterVAlue" BehaviorID="autoComplete"
+                                        TargetControlID="txtFilterValue" ServicePath="~/AutoComlete.asmx" ServiceMethod="GetCompletionList"
+                                        MinimumPrefixLength="3" CompletionInterval="1" EnableCaching="true" CompletionSetCount="1"
+                                        CompletionListCssClass="AutoExtender" CompletionListItemCssClass="AutoExtenderList"
+                                        CompletionListHighlightedItemCssClass="AutoExtenderHighlight" CompletionListElementID="divwidth">
+                                    </cc1:AutoCompleteExtender>
+                                  
+                                   
+                                </td>
+                            </tr>
+                            <tr>
+                                                       
+                            <td>
+                             Date
+                                    <asp:TextBox ID="txtFromDate" runat="server" CssClass="textBox1" Width="60px"></asp:TextBox>
+                                    <asp:ImageButton ID="ImgBCalender" runat="server" ImageUrl="~/Icons/calendar_view_month.png" />
+                                    <cc1:CalendarExtender ID="ceFromDate" runat="server" CssClass="MyCalendar" TargetControlID="txtFromDate"
+                                        PopupButtonID="ImgBCalender">
+                                    </cc1:CalendarExtender>
+                                    <cc1:FilteredTextBoxExtender ID="FilteredTextBoxExtender39" runat="server" FilterType="Custom,Numbers"
+                                        ValidChars="/,-" TargetControlID="txtFromDate">
+                                    </cc1:FilteredTextBoxExtender>
+                                    To
+                                    <asp:TextBox ID="txtToDate" runat="server" CssClass="textBox1" Width="60px"></asp:TextBox>                                                 
+                                <asp:ImageButton ID="ImgToDate" runat="server" ImageUrl="~/Icons/calendar_view_month.png" />
+                                    <cc1:CalendarExtender ID="CalendarExtender1" runat="server" CssClass="MyCalendar" TargetControlID="txtToDate" PopupButtonID="ImgToDate">
+                                </cc1:CalendarExtender>
+                                <cc1:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="Custom,Numbers"
+                                    ValidChars="/,-" TargetControlID="txtToDate">
+                                </cc1:FilteredTextBoxExtender>                            
+                            </td>                            
+                            </tr>                          
+                            <tr>
+                                <td>
+                              
+                                  &nbsp;
+                                    <asp:Button ID="btnSearch" runat="server" CssClass="" OnClick="btnSearch_Click" Text="Search"
+                                        ValidationGroup="Search" />
+                                    &nbsp;
+                                </td>
+                                <td colspan="2">
+                                    <asp:Label ID="lblMesag" runat="server" Text="" Font-Bold="true" Font-Size="12px"></asp:Label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!--form fieldset wrapper mid inner ended-->
+                </div>
+                <!--Ended Div of form fieldset wrapper middle part of left and right border-->
+                <div class="form-fieldset-wrapper-bottom">
+                </div>
+                <!--Div started for the form fieldset wrapper bottom founded-->
+            </div>
+            <!--ended Div of Wrapping Form Fields Set-->
+        </div>
+       <div id="all-form-wrap">
+            <div class="form-fieldset-wrapper">
+                <!--Start Div To Wrapping Form Fields Set-->
+                <div class="form-fieldset-wrapper-top">
+                    <!--Div for the form fieldset wrapper top rounded part-->
+                    <h2>
+                        Student List
+                    </h2>
+                </div>
+                <!--ended Div of Form fieldset wrapper top rounded part-->
+                <div class="form-fieldset-wrapper-mid">
+                    <!--Div for the form fieldset wrapper middle part for the left and right border-->
+                    <div class="form-fieldset-wrapper-mid-inner9">
+                        <!--start list member blocks-->
+                       <%-- <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                            <ContentTemplate>--%>
+                                <asp:Panel ID="Panel1" runat="server">
+                                <div id="Div1" style="width: 693px">                                
+                                <asp:ImageButton ID="imgapp" runat="server" src="..\Icons\button.png" width="20%" Height="30%" 
+                                        Visible="false"/>
+                                </div>
+                                <div>
+                                   <asp:Label ID="Label1" runat="server" Text="" Font-Bold="true" Font-Size="12px"></asp:Label>                              
+                                </div>
+                                    <div id="list-member-block" style="width: 693px">
+                                        <asp:GridView ID="gvStudentList" runat="server" AutoGenerateColumns="false" DataKeyNames="Id"
+                                            EmptyDataText="There are no records to display." OnRowDataBound="gvStudentList_RowDataBound"
+                                            GridLines="Both" CssClass="grid-view" 
+                                            OnRowCommand="gvStudentList_RowCommand" OnSorted="gvStudentList_Sorted"                                           
+                                            OnSorting="gvStudentList_Sorting"        
+                                            onselectedindexchanged="gvStudentList_SelectedIndexChanged" >
+                                            <FooterStyle CssClass="GridFooter" />
+                                            <RowStyle CssClass="GridItem" />
+                                            <Columns>
+                                                <asp:TemplateField HeaderText="S.N." HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblSN" runat="server" Text='<%#Container.DataItemIndex+1 %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                 <asp:TemplateField HeaderText="Id" SortExpression="Username" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>                                                    
+                                                        <asp:Label ID="lbluserName" ForeColor="BlueViolet" runat="server" Text='<%#Bind("Username") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                 <asp:TemplateField HeaderText="Pwd" SortExpression="apassword" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>                                                    
+                                                        <asp:Label ID="lblpassword" ForeColor="BlueViolet"  runat="server" Text='<%#Bind("apassword") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                   <asp:TemplateField HeaderText="Status" SortExpression="astatus" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>   
+                                                    <asp:HiddenField  ID="hklinkid" runat="server" Value='<%#Bind("LinkId") %>'/>
+                                                    <asp:HiddenField  ID="hktc" runat="server"/>
+                                                    <asp:HyperLink ID="lnk1" runat="server" Text='<%#Bind("astatus")  %>' Target="_blank" NavigateUrl='<%#"~/Pages/PrintOtherReport.aspx?E=15&A="+ Eval("test_code") %>'></asp:HyperLink>                                                                
+                                                      <%--<asp:Label ID="lblastatus" ForeColor="green"  runat="server" Text='<%#Bind("astatus") %>'></asp:Label>--%>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                 <asp:TemplateField HeaderText="TestCode" HeaderStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>                                                    
+                                                        <asp:DropDownList ID="drptestcode" runat="server"></asp:DropDownList>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Counseled" SortExpression="astatus" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>   
+                                                    <asp:Radiobuttonlist id="rdocounsel" runat="server" repeatdirection="Horizontal" autopostback="true"  OnSelectedIndexChanged="rdocounsel_SelectedIndexChanged"   selectedvalue= '<%#Bind("counsel") %>'                      >
+                                                 <asp:ListItem  Text="YES" Value="YES">
+                                                 </asp:ListItem>
+                                                 <asp:ListItem  Text="NO" Value="NO">
+                                                 </asp:ListItem>
+                                                 <asp:ListItem  Text="V" Value="V">
+                                                 </asp:ListItem>
+                                                 </asp:Radiobuttonlist>                          
+                                                 </ItemTemplate>
+                                                 </asp:TemplateField>
+                                                 <asp:TemplateField HeaderText="Act." ItemStyle-HorizontalAlign="Left" HeaderStyle-ForeColor="White">
+                                         
+                                                <ItemTemplate>
+                                                <asp:radiobutton ID="chkactiveaptitude" runat="server" Checked='<%#Bind("active") %>' GroupName="rdogroup" />
+                                                </ItemTemplate>
+                                            <HeaderStyle ForeColor="White" />
+                                            <ItemStyle HorizontalAlign="Left" />
+                                        </asp:TemplateField>                                                                                                                                
+                                                 
+                                                    <asp:TemplateField HeaderText="DeAct." SortExpression="activate" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>                                                    
+                                                    <asp:radiobutton ID="chkdeactiveapp" runat="server" Checked='<%#Bind("deactive") %>' GroupName="rdogroup"/>
+                                                    </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Regn No" SortExpression="RegistrationNo" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>                                                    
+                                                    <asp:Label ID="lblName" runat="server" Text='<%#Bind("RegistrationNo") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="S.Name" SortExpression="Name" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
+                                                <ItemTemplate> 
+                                                   <%--  <asp:HiddenField  ID="hklinkid" runat="server" Value='<%#Bind("LinkId") %>'/>--%>
+                                                                                         
+                                                <asp:LinkButton ID="lnkId" runat="server" CommandName="Modify" CommandArgument='<%#Bind("LinkId") %>'
+                                                 Text='<%#Bind("Name") %>'>
+                                                 </asp:LinkButton>
+                                                 </ItemTemplate>
+                                                </asp:TemplateField> 
+                                              <%-- <asp:TemplateField HeaderText="F.Status" SortExpression="FormStatus">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblFormStatus" runat="server" Text='<%# Bind("CallerStatus") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>--%>
+                                                <asp:TemplateField HeaderText="Degree" SortExpression="DegreeType"  HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblDegree" runat="server" Text='<%# Bind("DegreeType") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                            <HeaderStyle CssClass="GridHeader" />
+                                           <PagerSettings Mode="NumericFirstLast" />
+                                            <PagerStyle CssClass="grid-pagination" HorizontalAlign="Right" />
+                                            <SelectedRowStyle CssClass="GridRowOver" />
+                                            <EditRowStyle />
+                                            <AlternatingRowStyle CssClass="GridAltItem" />
+                                        </asp:GridView>
+                                    </div>
+                                </asp:Panel>
+                            <%--</ContentTemplate>
+                        </asp:UpdatePanel>--%>
+                         <table >
+                        <tr class="button">
+                        <td class="button1">
+                        <asp:Button ID="btnFirst" runat="server" Text="<<" OnClick="btnFirst_Click" />
+                        <asp:Button ID="btnPrev" runat="server" Text="<"  OnClick="btnPrev_Click"   />
+                        Page
+                        <asp:TextBox ID="txtPageNo" runat="server" Text="1" Width="45px"></asp:TextBox>
+                        of
+                        <asp:Label ID="lblPages" runat="server" Text="1"></asp:Label>
+                        <asp:Button ID="btnNext" runat="server" Text=">"   OnClick="btnNext_Click"   />
+                        <asp:Button ID="btnLast" runat="server" Text=">>"  OnClick="btnLast_Click"   />
+                        <asp:RequiredFieldValidator ID="rfvPageNo" runat="server" ControlToValidate="txtPageNo"
+                        ErrorMessage="*" ValidationGroup="grpGo">
+                        </asp:RequiredFieldValidator>
+                        <asp:RangeValidator ID="rvPageNo" runat="server" ControlToValidate="txtPageNo" Type="Integer"
+                        MinimumValue="1" MaximumValue="1" ValidationGroup="grpGo"></asp:RangeValidator>                        
+                        </td>
+                        <td align="right">
+                        <asp:Label ID="lblStatus" runat="server"> Displaying 1 of 1</asp:Label>
+                        </td>
+                        </tr>
+                        </table>
+
+                    </div>
+                </div>
+                <!--form fieldset wrapper mid inner ended-->
+            </div>
+            <!--Ended Div of form fieldset wrapper middle part of left and right border-->
+            <div class="form-fieldset-wrapper-bottom">
+            </div>
+            <!--Div started for the form fieldset wrapper bottom founded-->
+        </div>
+    </asp:Panel>
+    </div>
+    <asp:Button ID="btnShowPopup" runat="server" style="display:none" />
+        <cc1:ModalPopupExtender ID="ModalPopupExtender1" runat="server" TargetControlID="btnShowPopup" PopupControlID="pnlpopup"
+
+BackgroundCssClass="modalBackground">
+</cc1:ModalPopupExtender>
+
+<asp:Panel ID="pnlpopup" runat="server" BackColor="White" Height="269px" Width="400px" style="display:none">
+<table width="100%" style="border:Solid 3px #D55500; width:100%; height:100%" cellpadding="0" cellspacing="0">
+<tr style="background-color:#D55500">
+<td colspan="2" style=" height:10%; color:White; font-weight:bold; font-size:larger" align="center">Couseling Informations</td>
+</tr>
+<tr style="background-color: #008080; color: #FFFFFF; font-size: large; font-weight: bold">
+<td align="right" style="width:45%">
+Test Code: </td>
+<td>
+<asp:Label ID="Lbltestcode2" runat="server"></asp:Label>
+</td>
+<asp:HiddenField ID="HiddenField1" runat="server" />
+</tr>
+<tr style="background-color: #008080; color: #FFFFFF; font-size: large; font-weight: bold">
+<td align="right" style="width:45%">
+Counseled date : </td>
+<td>
+  <asp:TextBox ID="txtSCFromDay" runat="server" CssClass="textBox1" Width="40px" MaxLength="2"></asp:TextBox>
+    <asp:TextBox ID="txtSCFromMonth" runat="server" CssClass="textBox1" Width="40px"
+        MaxLength="2"></asp:TextBox>
+   <asp:TextBox ID="txtSCFromYear" runat="server" CssClass="textBox1" Width="50px" MaxLength="4"></asp:TextBox>
+   <cc1:TextBoxWatermarkExtender ID="TextBoxWatermarkExtender34" runat="server" Enabled="True"
+      TargetControlID="txtSCFromYear" WatermarkText="YYYY">
+   </cc1:TextBoxWatermarkExtender>
+   <cc1:TextBoxWatermarkExtender ID="TextBoxWatermarkExtender35" runat="server" Enabled="True"
+                                                                        TargetControlID="txtSCFromMonth" WatermarkText="MM">
+   </cc1:TextBoxWatermarkExtender>
+  <cc1:TextBoxWatermarkExtender ID="TextBoxWatermarkExtender36" runat="server" Enabled="True"
+    TargetControlID="txtSCFromDay" WatermarkText="DD">   
+    </cc1:TextBoxWatermarkExtender>
+</td>
+<asp:HiddenField ID="hdntestcode" runat="server" />
+</tr>
+<tr style="background-color: #008080; color: #FFFFFF; font-size: large; font-weight: bold">
+<td align="right" style="width:45%">
+Remarks :
+</td>
+<td>
+<asp:TextBox ID="txtremarks" runat="server" TextMode="MultiLine"></asp:TextBox>
+</td>
+</tr>
+
+<tr>
+
+<td>
+</td>
+<td><asp:Label ID="lblmess" runat="server" Text="11" Font-Bold="true" Font-Size="Large"></asp:Label></td>
+</tr>
+<tr>
+<td></td>
+<td>
+<asp:Button ID="btnUpdate" CommandName="Save" runat="server" Text="Update" OnClick="btnupdate_click" />
+<asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btncancel_click" />
+
+</td>
+</tr></table>
+</asp:Panel>
+</asp:Content>
+

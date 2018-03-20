@@ -1,0 +1,654 @@
+﻿
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data;
+using System.IO;
+using CrystalDecisions.Reporting;
+using CrystalDecisions.CrystalReports;
+using CrystalDecisions.CrystalReports.Engine;
+using System.Text;
+using System.Data.SqlClient;
+
+public partial class Pages_AptitudeTestActivate : System.Web.UI.Page
+{
+    enum PageNav { First, Previous, Next, Last, None }
+    private int iPageRecords;
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        iPageRecords = 20;
+        rdbName.Focus();
+        if (!IsPostBack)
+        {
+            lblMesag.Text = "";           
+            gvStudentList.DataSource = "";           
+            LoadDropdown();
+            FillGridView(1, iPageRecords);
+        }
+    }
+    public void LoadDropdown()
+    {
+        StudentRegistrationDAL s = new StudentRegistrationDAL();        
+    }
+    private void FillGridView(int iPageNo, int iPageRecords)
+    {
+        try
+        {
+            if (Session["pop"] != "1")
+            {
+                lblMesag.Text = "";
+                Label1.Text = "";
+            }
+        }
+        catch
+        {
+        }
+        try
+        {
+            string FilterBy = "All";
+            if (rdbNumber.Checked == true)
+                FilterBy = "Number";
+            if (rdbEmail.Checked == true)
+                FilterBy = "Email";
+            if (rdbName.Checked == true)
+                FilterBy = "Name";
+            int NonRegistered = 0;
+            if (chkNonRegister.Checked == true)
+                NonRegistered = 1;
+
+            string FromDate = "2009/01/01";
+            if (txtFromDate.Text != "")
+            {
+                try
+                {
+                    DateTime dt1 = DateTime.Parse(txtFromDate.Text);
+                    FromDate = txtFromDate.Text;
+                }
+                catch
+                {
+                    lblMesag.Text = "Please Check From Date!";
+                    return;
+                }
+            }
+            string ToDate = "2016/01/01";
+            if (txtToDate.Text != "")
+            {
+                try
+                {
+                    DateTime dt1 = DateTime.Parse(txtToDate.Text);
+                    ToDate = txtToDate.Text;
+                }
+                catch
+                {
+                    lblMesag.Text = "Please Check From Date!";
+                    return;
+                }
+            }
+            string filter;
+            if (txtFilterValue.Text == "")
+                filter = "0";
+            else
+                filter = txtFilterValue.Text;
+
+            Session["filter"] = filter;
+            string examtype="";
+            if (rdoexternal.Checked == true)
+                examtype = "exter";
+            if (rdointernal.Checked == true)
+                examtype = "inter";
+            string EmpId = "";
+            EmpId = Session["EmpId"].ToString();
+            StudentRegistrationDAL s = new StudentRegistrationDAL();
+            System.Data.DataTable dt = s.GetStudentDetailsAptitude(FilterBy, filter, NonRegistered, EmpId, FromDate, ToDate, examtype, iPageNo, iPageRecords);
+            ViewState["_ds_grid"] = dt;
+            gvStudentList.DataSource = dt;
+            gvStudentList.DataBind();
+            //if (gvStudentList.Rows.Count > 0)
+            //    imgapp.Visible = true;
+            //else
+            //    imgapp.Visible = false;
+
+
+            try
+            {
+                if (!IsPostBack)
+                {
+                    int iPageCount;
+                    DataTable dt1 = new DataTable();
+                    dt1 = s.GetStudentDetailsAptitudecount(FilterBy, filter, NonRegistered, EmpId, FromDate, ToDate, examtype, iPageNo, iPageRecords);
+                    iPageCount = Convert.ToInt32(dt1.Rows[0][0]);
+                    if (iPageCount == 0)
+                    {
+                        rvPageNo.MaximumValue = "1";
+                        iPageCount = 1;
+                    }
+                    else
+                        rvPageNo.MaximumValue = iPageCount.ToString();
+                    ViewState["PageCount"] = iPageCount;
+                    btnFirst.Enabled = false;
+                    btnPrev.Enabled = false;
+                    ViewState["currentPage"] = "1";
+                }
+                txtPageNo.Text = iPageNo.ToString();
+                lblPages.Text = ViewState["PageCount"].ToString();
+                lblStatus.Text = "Displaying Page : " + iPageNo.ToString() + " of " + ViewState["PageCount"].ToString();
+            }
+            catch
+            {
+            }
+
+
+
+        }
+        catch (Exception ex)
+        {
+            lblMesag.Text = "Please Fill Correct Information!";
+        }
+    }
+    protected void gvStudentList_PageIndexChanged(object sender, EventArgs e)
+    {
+
+    }
+    protected void gvStudentList_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            //if (gvStudentList.Rows.Count > 0)
+            //    imgapp.Visible = true;
+            //else
+            //    imgapp.Visible = false;           
+
+            Label lblSN = (Label)e.Row.FindControl("lblSN");
+            lblSN.Text = (e.Row.RowIndex + 1).ToString();
+            Label lblDegree = (Label)e.Row.FindControl("lblDegree");
+            try
+            {
+                if (int.Parse(lblDegree.Text) == 1)
+                    lblDegree.Text = "BBA";
+                else if (int.Parse(lblDegree.Text) == 6)
+                    lblDegree.Text = "MBA";
+                else if (int.Parse(lblDegree.Text) == 7)
+                    lblDegree.Text = "BBA Weekend";
+                else if (int.Parse(lblDegree.Text) == 8)
+                    lblDegree.Text = "MBA Weekend";
+                else if (int.Parse(lblDegree.Text) == 9)
+                    lblDegree.Text = "Short Course";
+                if (int.Parse(lblDegree.Text) == 0)
+                    lblDegree.Text = "";
+            }
+            catch
+            {               
+            }
+
+            try
+            {
+                RadioButtonList rc = (RadioButtonList)e.Row.FindControl("rdocounsel");
+                if (Session["cflag"] == "1")
+                {
+                    rc.SelectedValue = "Y";
+                }
+                else
+                  {
+                    rc.SelectedValue = "N";
+                  }
+                }
+           catch
+            {
+            }
+
+            try
+            {
+                DropDownList drptestcode = (DropDownList)e.Row.FindControl("drptestcode");
+                StudentRegistrationDAL s = new StudentRegistrationDAL();               
+                HiddenField hklinkid = (HiddenField)e.Row.FindControl("hklinkid");
+                drptestcode.DataSource = s.SetDropdownListAstestcode(hklinkid.Value);
+                drptestcode.DataTextField = "test_code";
+                drptestcode.DataValueField = "test_code";
+                drptestcode.DataBind();
+
+            }
+            catch
+            {
+            }
+        }
+    }
+    protected void gvStudentList_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        try
+        {
+            if (e.CommandName.Equals("Modify"))
+            {
+                string Id = e.CommandArgument.ToString();
+                //Response.Redirect(string.Format("StudentRegistration.aspx?Id={0}", Id), false);
+                //Response.Redirect(string.Format("NewRegistrant.aspx?Id=" + Id + "&Flag=" + chkNonRegister.Checked), false);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        lblMesag.Text = "";
+        this.FillGridView(1, iPageRecords);
+      
+
+    }
+    protected void gvStudentList_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        gvStudentList.PageIndex = e.NewPageIndex;
+        FillGridView(1, iPageRecords);
+    }
+    protected void gvStudentList_Sorted(object sender, EventArgs e)
+    {
+        try
+        {
+            string _expression = ViewState["_expression"].ToString();
+            string _direction = ViewState["_direction"].ToString();
+
+            System.Data.DataTable _ds = (System.Data.DataTable)ViewState["_ds_grid"];
+            _ds.DefaultView.Sort = _expression + " " + _direction;
+            gvStudentList.DataSource = _ds.DefaultView;
+            gvStudentList.DataBind();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+
+    }
+    protected void gvStudentList_Sorting(object sender, GridViewSortEventArgs e)
+    {
+        try
+        {
+            string _expression = e.SortExpression;
+            string _direction = e.SortDirection.ToString();
+
+            if (ViewState["_expression"] == null) { ViewState["_expression"] = ""; }
+            if (ViewState["_direction"] == null) { ViewState["_direction"] = ""; }
+
+            string _old_expression = ViewState["_expression"].ToString();
+            string _old_direction = ViewState["_direction"].ToString();
+
+            if (_expression == _old_expression)
+            {
+                if (_old_direction == "Asc")
+                {
+                    ViewState["_direction"] = "Desc";
+                }
+                else
+                {
+                    ViewState["_direction"] = "Asc";
+                }
+            }
+            else
+            {
+                ViewState["_direction"] = "Asc";
+                ViewState["_expression"] = _expression;
+            }
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+
+    }
+    protected void imgapp_Click()
+    {
+        try
+        {
+            StudentRegistrationDAL app = new StudentRegistrationDAL();
+            string message = "";
+            string createdip;
+
+            createdip = app.GetMacAddress();
+
+            foreach (GridViewRow ro in gvStudentList.Rows)
+            {
+                CheckBox chkactivate = (CheckBox)ro.FindControl("chkactiveaptitude");
+                CheckBox chkdeactiveapp = (CheckBox)ro.FindControl("chkdeactiveapp");
+                RadioButtonList rr = (RadioButtonList)ro.FindControl("rdocounsel");
+
+                int Empid;
+                try
+                {
+                    Empid = int.Parse(Session["EMPID"].ToString());
+                }
+
+                catch
+                {
+                    Empid = 0;
+                }
+                HiddenField hklinkid = (HiddenField)ro.FindControl("hklinkid");
+                HiddenField hktc = (HiddenField)ro.FindControl("hktc");
+                DropDownList drptestcode = (DropDownList)ro.FindControl("drptestcode");
+                hktc.Value = drptestcode.SelectedValue;
+                try
+                {
+
+                    if (rr.SelectedValue == "NO")
+                    {
+                        message = app.UpdateApptitudeCounsel(hktc.Value.ToString(), "NA", "2014-01-01", Session["empid"].ToString(), "D");
+                    }
+
+                }
+                catch
+                {
+
+                }
+
+                //if (chkactivate.Checked == true)
+                //{
+                //    message = app.ActivateAptitude(int.Parse(hklinkid.Value), 1, Empid, createdip);
+                //}
+                //if (chkdeactiveapp.Checked == true)
+                //{
+                //    message = app.ActivateAptitude(int.Parse(hklinkid.Value), 0, Empid, createdip);
+
+                //}
+                if (message == "1")
+                {
+                    Label1.Text = "Data Submitted Sucessfully.";
+                    Label1.ForeColor = System.Drawing.Color.Blue;
+                }
+                else
+                {
+                    Label1.Text = "Please Try Again.";
+                    Label1.ForeColor = System.Drawing.Color.Red;
+                }
+
+
+            }
+        }
+        catch
+        {
+
+        }
+    }
+    protected void gvStudentList_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
+    protected void rdocounsel_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+        try
+        {
+            Label1.Text = "";
+            RadioButtonList list = (RadioButtonList)sender;
+            GridViewRow rv = (GridViewRow)list.Parent.Parent;
+            GridViewRow gvrow = (GridViewRow)list.NamingContainer;
+
+            string s = (gvrow.FindControl("drptestcode") as DropDownList).SelectedValue;
+
+
+            int idx = rv.RowIndex;
+            try
+            {
+                if (list.SelectedValue == "V")
+                {
+                    StudentRegistrationDAL app = new StudentRegistrationDAL();
+                    DataSet ds;
+                    ds = app.GetCounsilValues(s);
+                    txtremarks.Text = ds.Tables[0].Rows[0][0].ToString();
+                    txtSCFromDay.Text = ds.Tables[0].Rows[0][1].ToString();
+                    txtSCFromMonth.Text = ds.Tables[0].Rows[0][2].ToString();
+                    txtSCFromYear.Text = ds.Tables[0].Rows[0][3].ToString();
+                    lblmess.Text = "";
+                    this.ModalPopupExtender1.Show();
+
+
+
+                }
+            }
+            catch
+            {
+            }
+            if (list.SelectedValue == "YES")
+            {
+                hdntestcode.Value = s;
+                Lbltestcode2.Text = hdntestcode.Value.ToString();
+                if (s == "")
+                    this.ModalPopupExtender1.Hide();
+                else
+                {
+                    txtremarks.Text = "";
+                    txtSCFromDay.Text = "";
+                    txtSCFromMonth.Text = "";
+                    txtSCFromYear.Text = "";
+
+                    lblmess.Text = "";
+                    if (Session["flag"] != "1")
+                        this.ModalPopupExtender1.Show();
+                    else
+                    {
+
+                        list.Items[1].Enabled = false;
+
+                        list.Items[2].Enabled = false;
+                        list.SelectedValue = "o";
+                    }
+                }
+            }
+
+            if (list.SelectedValue == "NO")
+            {
+                imgapp_Click();
+
+            }
+
+        }
+        catch
+        {
+
+        }
+
+
+    }
+    protected void btncancel_click(object sender, EventArgs e)
+    {
+        FillGridView(1, iPageRecords);
+        this.ModalPopupExtender1.Hide();
+    }
+    protected void btnupdate_click(object sender, EventArgs e)
+    {
+        
+        StudentRegistrationDAL app = new StudentRegistrationDAL();
+        string message;
+        int ff;
+        ff = 0;
+        lblmess.Text = ""     ; 
+        try
+      
+
+        {
+            if (int.Parse(txtSCFromDay.Text) > 31)
+            {
+                lblmess.Text = "Enter Valid Day";
+                lblmess.ForeColor = System.Drawing.Color.Red;
+                ff = 1; this.ModalPopupExtender1.Show();
+            }
+        }
+        catch
+        {
+          lblmess.Text  = "Enter Valid Day"; ff = 1;
+          lblmess.ForeColor = System.Drawing.Color.Red;
+          this.ModalPopupExtender1.Show();
+        }
+
+
+        try
+        {
+            if (int.Parse(txtSCFromMonth.Text) > 12)
+            {
+                lblmess.Text = "Enter Valid Month"; ff = 1;
+                lblmess.ForeColor = System.Drawing.Color.Red; this.ModalPopupExtender1.Show();
+
+             
+
+            }
+        }
+        catch
+        {
+            lblmess.Text = "Enter Valid Month";
+            lblmess.ForeColor = System.Drawing.Color.Red; ff = 1; this.ModalPopupExtender1.Show();
+           
+        }
+
+        try
+        {
+            if (int.Parse(txtSCFromYear.Text) >  int.Parse(DateTime.Now.Year.ToString()))
+            {
+                lblmess.Text = "Enter Valid Year";
+                lblmess.ForeColor = System.Drawing.Color.Red; ff = 1; this.ModalPopupExtender1.Show();
+
+
+
+            }
+        }
+        catch
+        {
+            lblmess.Text = "Enter Valid Year";
+            lblmess.ForeColor = System.Drawing.Color.Red; ff = 1; this.ModalPopupExtender1.Show();
+
+        }
+
+
+        try
+        {
+            DateTime date1 = new DateTime(int.Parse(txtSCFromYear.Text), int.Parse(txtSCFromMonth.Text), int.Parse(txtSCFromDay.Text), 0, 0, 0);
+            DateTime date2 = new DateTime(int.Parse(DateTime.Now.Year.ToString()), int.Parse(DateTime.Now.Month.ToString()), int.Parse(DateTime.Now.Day.ToString()), 12, 0, 0);
+
+            int result = DateTime.Compare(date1, date2);
+            if (result >0)
+            {
+                lblmess.Text = "Counseled date Should not be the Future Date";
+                lblmess.ForeColor = System.Drawing.Color.Red; ff = 1; this.ModalPopupExtender1.Show();
+
+
+
+            }
+        }
+        catch
+        {
+            lblmess.Text = "Counseled date Should not be the Future Date";
+            lblmess.ForeColor = System.Drawing.Color.Red; ff = 1; this.ModalPopupExtender1.Show();
+
+        }
+
+
+        {
+            try
+            {
+                if (ff != 1)
+                {
+                    string cdate = txtSCFromYear.Text + "/" + txtSCFromMonth.Text + "/" + txtSCFromDay.Text;
+                    message = app.UpdateApptitudeCounsel(Lbltestcode2.Text, txtremarks.Text, cdate, Session["empid"].ToString(), "I");
+
+
+                    if (message == "1")
+                    {
+                        Label1.Text = "Data Submitted Sucessfully.";
+                        Label1.ForeColor = System.Drawing.Color.Blue;
+                        Session["pop"] = "1";
+                        FillGridView(1, iPageRecords);
+                        this.ModalPopupExtender1.Hide();
+                        Session["cflag"] = "1";
+                        
+                    }
+                    else
+                    {
+                        lblmess.Text = "Please Try Again.";
+                        lblmess.ForeColor = System.Drawing.Color.Red;
+                        this.ModalPopupExtender1.Show();
+                    }
+                }
+            }
+            catch
+            {
+                lblmess.Text = "Session Expired. Login Again .";
+                Label1.ForeColor = System.Drawing.Color.Red;
+            }
+
+                  
+        }
+
+    }
+     private   void PageChange(int currentPage, PageNav pg)
+    {
+        int pageCount;
+        pageCount = Convert.ToInt32(ViewState["PageCount"]);
+        btnFirst.Enabled = true;
+        btnPrev.Enabled = true;
+        btnNext.Enabled = true;
+        btnLast.Enabled = true;
+        switch (pg)
+        {
+            case PageNav.First:
+                currentPage = 1;
+                btnFirst.Enabled = false;
+                btnPrev.Enabled = false;
+                break;
+            case PageNav.Previous:
+                if (currentPage == 2)
+                {
+                    btnFirst.Enabled = false;
+                    btnPrev.Enabled = false;
+                }
+                currentPage--;
+                break;
+            case PageNav.Next:
+                if (currentPage == pageCount - 1)
+                {
+                    btnNext.Enabled = false;
+                    btnLast.Enabled = false;
+                }
+                currentPage++;
+                break;
+            case PageNav.Last:
+                btnNext.Enabled = false;
+                btnLast.Enabled = false;
+                currentPage = Convert.ToInt32(ViewState["PageCount"]);
+                break;
+            case PageNav.None:
+                if (currentPage == 1)
+                {
+                    btnFirst.Enabled = false;
+                    btnPrev.Enabled = false;
+                }
+                else if (currentPage == pageCount)
+                {
+                    btnNext.Enabled = false;
+                    btnLast.Enabled = false;
+                }
+                break;
+
+        }
+        FillGridView(currentPage, 20);
+        ViewState["currentPage"] = currentPage;
+    }
+    protected void btnFirst_Click(object sender, EventArgs e)
+    {
+        PageChange(Convert.ToInt32(ViewState["currentPage"]), PageNav.First);
+    }
+    protected void btnPrev_Click(object sender, EventArgs e)
+    {
+        PageChange(Convert.ToInt32(ViewState["currentPage"]), PageNav.Previous);
+    }
+    protected void btnNext_Click(object sender, EventArgs e)
+    {
+        PageChange(Convert.ToInt32(ViewState["currentPage"]), PageNav.Next);
+    }
+    protected void btnLast_Click(object sender, EventArgs e)
+    {
+        PageChange(Convert.ToInt32(ViewState["currentPage"]), PageNav.Last);
+    }
+
+
+
+}

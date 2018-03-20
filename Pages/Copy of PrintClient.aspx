@@ -1,0 +1,39 @@
+﻿<%@ Page Title="Skyline : Print Offline" Language="C#" MasterPageFile="~/MasterPage2.master"
+    AutoEventWireup="true" CodeFile="Copy of PrintClient.aspx.cs" Inherits="Pages_PrintClient" %>
+
+<%@ Register Assembly="CrystalDecisions.Web, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304"
+    Namespace="CrystalDecisions.Web" TagPrefix="CR" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js"> </script>     
+ <style type="text/css">
+    @media print {
+  body * {
+    visibility:hidden;
+  }
+  #section_to_print, #section_to_print * {
+    visibility:visible;
+  }
+  #section_to_print {
+    position:absolute;
+    left:0;
+    top:0;
+  }
+}
+    </style>
+    <script type="text/javascript">
+        function printdiv(id) {
+            window.print()
+            return false;
+        }
+    </script>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <input name="b_print" type="button" onclick="printdiv('#printReady')" value=" Print " />
+    <div id="section_to_print">
+        <CR:CrystalReportViewer ID="CrystalReportViewer1" runat="server" AutoDataBind="true"
+            DisplayStatusbar="False" DisplayToolbar="False" EnableDrillDown="False" EnableParameterPrompt="False"
+            EnableTheming="False" EnableToolTips="False" HasDrilldownTabs="False" HasToggleGroupTreeButton="False"
+            HasToggleParameterPanelButton="False" Height="50px" SeparatePages="False" ToolPanelView="None"
+            Width="350px" />
+    </div>
+</asp:Content>
