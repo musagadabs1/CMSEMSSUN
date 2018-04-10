@@ -83,25 +83,23 @@
                                         runat="server" Display="Dynamic" ErrorMessage="Invalid" ValidationGroup="CSubmit" SetFocusOnError="True"></asp:RegularExpressionValidator>
                                 </td>
                             </tr>
-                             <tr>
-                                <td style="vertical-align:top; padding: 3px 5px;">
-                                    Date Of Agreement
+                            <tr>
+                                <td style="vertical-align: top; padding: 3px 5px;">Date Of Agreement
                                 </td>
-                                <td style="vertical-align:top; padding: 3px 5px;">
+                                <td style="vertical-align: top; padding: 3px 5px;">
                                     <asp:TextBox ID="txtDateOfAgreement" runat="server" Width="100px" CssClass="textBox1"></asp:TextBox>
                                     <cc1:CalendarExtender ID="txt_JoinDateCalendarExtender" Format="dd/MM/yyyy" CssClass="MyCalendar"
                                         TargetControlID="txtDateOfAgreement" runat="server">
                                     </cc1:CalendarExtender>
-                                </td>                           
-                                <td style="vertical-align:top; padding: 3px 5px;">
-                                    Validity
                                 </td>
-                                <td style="vertical-align:top; padding: 3px 5px;">
+                                <td style="vertical-align: top; padding: 3px 5px;">Validity
+                                </td>
+                                <td style="vertical-align: top; padding: 3px 5px;">
                                     <asp:TextBox ID="txtValidity" runat="server" Width="100px" CssClass="textBox1"></asp:TextBox>
                                     <cc1:CalendarExtender ID="CalendarExtender1" Format="dd/MM/yyyy" CssClass="MyCalendar"
                                         TargetControlID="txtValidity" runat="server">
                                     </cc1:CalendarExtender>
-                                </td>                              
+                                </td>
                             </tr>
                             <tr>
                                 <td style="vertical-align:top; padding: 3px 5px;">

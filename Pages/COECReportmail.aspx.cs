@@ -51,7 +51,7 @@ public partial class Pages_COECReportmail : System.Web.UI.Page
             Response.Redirect("Login.aspx");
         }
 
-        if ((Session["EMPID"].ToString() == "1636") || (Session["EMPID"].ToString() == "918"))
+        if ((Session["EMPID"].ToString() == "1636") || (Session["EMPID"].ToString() == "918") || (Session["EMPID"].ToString() == "1620"))
         {
 
 
@@ -566,7 +566,7 @@ public partial class Pages_COECReportmail : System.Web.UI.Page
             txtCC.Enabled = false;
             txtTo.Enabled = false;
             txtCC.Text = "";
-            txtTo.Text = "nitin@skylineuniversity.ac.ae";
+            txtTo.Text = "itsun@skylineuniversity.ac.ae";
 
 
         }
