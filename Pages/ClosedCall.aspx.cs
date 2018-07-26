@@ -34,7 +34,7 @@ public partial class Pages_ClosedCall : System.Web.UI.Page
         }
         catch
         {
-            Response.Redirect("login.aspx");
+            //Response.Redirect("login.aspx");
         }
     }
     protected void Drpschool_SelectedIndexChanged(object sender, EventArgs e)

@@ -551,14 +551,14 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <asp:Label ID="lblArabNonArab" runat="server" CssClass="" Text="Local/International"></asp:Label>
+                                            <asp:Label ID="lblArabNonArab" runat="server" CssClass="" Text="African/Non African"></asp:Label>
                                         </td>
                                         <td>
                                             <asp:DropDownList ID="ddlArabNonArab" runat="server" CssClass="textBox9" TabIndex="8"
                                                 Enabled="TRUE">
                                                 <asp:ListItem Value="0">Select</asp:ListItem>
-                                                <asp:ListItem Value="1">Local</asp:ListItem>
-                                                <asp:ListItem Value="2">International</asp:ListItem>
+                                                <asp:ListItem Value="1">African</asp:ListItem>
+                                                <asp:ListItem Value="2">Non African</asp:ListItem>
                                             </asp:DropDownList>
                                         </td>
                                     </tr>
